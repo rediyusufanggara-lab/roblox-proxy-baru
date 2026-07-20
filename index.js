@@ -8,10 +8,11 @@ app.get("/catalog", (req, res) => {
     const limit = req.query.limit || 30;  
     const cursor = req.query.cursor || ""; 
 
-    // URL menggunakan backtick (`) dan domain catalog.roblox.com yang valid
-    let robloxUrl = `https://roblox.com{encodeURIComponent(query)}&limit=${limit}`;
+    // URL murni menggunakan concatenating (+), dijamin bebas dari error tanda petik JavaScript
+    let robloxUrl = "https://roblox.com" + encodeURIComponent(query) + "&limit=" + limit;
+    
     if (cursor !== "") {
-      robloxUrl += `&cursor=${cursor}`;
+      robloxUrl += "&cursor=" + cursor;
     }
 
     https.get(robloxUrl, {
