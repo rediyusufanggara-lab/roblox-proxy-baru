@@ -1,10 +1,21 @@
-// Di dalam script asli lu, tambahin logic cursor ini aja biar bisa scroll terus:
-const query = req.query.q || "hat";
-const cursor = req.query.cursor || ""; // <-- 1. Tambahin variabel ini
+const express = require("express");
+const app = express();
 
-// 2. Ini URL asli dari script lu, tinggal ditambahin pengecekan di bawahnya:
-let robloxUrl = `https://roblox.com{encodeURIComponent(query)}&limit=30`;
+app.get("/catalog", async (req, res) => {
+  try {
+    const query = req.query.q || "hat"; // default cari "hat"
+    
+    // Ini URL catalog resmi Roblox dengan penulisan tanda tanya (?) yang bener
+    const response = await fetch("https://roblox.com" + encodeURIComponent(query) + "&limit=30");
+    
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-if (cursor !== "") {
-    robloxUrl += `&cursor=${cursor}`; // <-- 3. Tempel halaman berikutnya kalau diminta Roblox Studio
-}
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log("Proxy running on port " + PORT);
+});
