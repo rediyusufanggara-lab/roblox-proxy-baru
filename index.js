@@ -9,7 +9,7 @@ app.get("/catalog", (req, res) => {
     const cursor = req.query.cursor || ""; 
 
     // URL murni menggunakan concatenating (+), dijamin bebas dari error tanda petik JavaScript
-    let robloxUrl = "https://roblox.com" + encodeURIComponent(query) + "&limit=" + limit;
+    let robloxUrl = "https://roblox.com/v1/search/items/details?keyword=" + encodeURIComponent(query) + "&limit=" + limit;
     
     if (cursor !== "") {
       robloxUrl += "&cursor=" + cursor;
